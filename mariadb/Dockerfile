@@ -16,6 +16,7 @@ MAINTAINER Yannoff <https://github.com/yannoff>
 RUN \
     apk --update --no-cache add \
         mysql \
+        mysql-client \
         pwgen \
         tzdata \
         libssl1.0 \
@@ -33,12 +34,15 @@ RUN \
     mkdir /run/mysqld && chown mysql:mysql /run/mysqld;
 
 # Alternatives - MariaDB genuine entry point needs gosu & mysql
-# - su-exec for gosu
-# - mysql_embedded for mysql (so we don't need to install mysql-client)
+# - su-exec for gosu: lighter and already packaged for Alpine
 RUN \ 
     apk add --no-cache bash su-exec; \
-    ln -s $(which su-exec) /sbin/gosu; \
-    ln -s /usr/bin/mysql_embedded /usr/bin/mysql
+    ln -s $(which su-exec) /sbin/gosu
+
+# Fix MariaDB bug in granting root user's permissions
+# https://github.com/docker-library/mariadb/issues/48
+COPY fix-permissions.sql /docker-entrypoint-initdb.d/fix-permissions.sql
+RUN chmod +x /docker-entrypoint-initdb.d/fix-permissions.sql
 
 # Purge
 RUN \
