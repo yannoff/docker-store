@@ -11,43 +11,45 @@ FROM alpine:latest
 
 MAINTAINER Yannoff <https://github.com/yannoff>
 
-# Install mariadb server, 
-# Also install bash, pwgen and libs needed by entrypoint script at first run
+# Installation
+# 1. Create socket dir
+# 2. Install mariadb server...
+# 3. and the libs needed by entrypoint script:
+#    - bash
+#    - mysql-client
+#    - pwgen
+#    - su-exec (alternative for gosu: lighter and already packaged for Alpine)
 RUN \
     apk --update --no-cache add \
+        bash \
+        su-exec \
         mysql \
         mysql-client \
         pwgen \
         tzdata \
         libssl1.0 \
-        libstdc++;
+        libstdc++; \
+    ln -s $(which su-exec) /sbin/gosu; \
+    mkdir /run/mysqld && chown mysql:mysql /run/mysqld; \
+    rm -rfv /var/cache/apk/; \
+    rm -rfv /usr/share/apk/keys/; \
+    cd /usr/sbin/; rm -v ftpd httpd; cd /usr/bin/; rm -v mysql_client_test_embedded mysqltest mysqltest_embedded
 
 # Fetch genuine entrypoint from mariadb official github repo, to be sure we have an up-to-date version
 RUN \
-    apk add curl; \
+    apk add --no-cache curl; \
     curl https://raw.githubusercontent.com/docker-library/mariadb/master/docker-entrypoint.sh -o /docker-entrypoint.sh; \
     chmod +x /docker-entrypoint.sh; \
-    ln -s /docker-entrypoint.sh /usr/local/bin/; 
+    ln -s /docker-entrypoint /usr/local/bin/; \
+    apk del curl; \
+    rm -rfv /var/cache/apk/; \
+    rm -rfv /usr/share/apk/keys/
 
-# Create socket dir
-RUN \
-    mkdir /run/mysqld && chown mysql:mysql /run/mysqld;
 
-# Alternatives - MariaDB genuine entry point needs gosu & mysql
-# - su-exec for gosu: lighter and already packaged for Alpine
-RUN \ 
-    apk add --no-cache bash su-exec; \
-    ln -s $(which su-exec) /sbin/gosu
 
 # Fix MariaDB bug in granting root user's permissions
 # https://github.com/docker-library/mariadb/issues/48
 COPY fix-permissions.sql /docker-entrypoint-initdb.d/fix-permissions.sql
-RUN chmod +x /docker-entrypoint-initdb.d/fix-permissions.sql
-
-# Purge
-RUN \
-    apk del curl; \
-    rm -rfv /var/cache/apk/
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD [ "mysqld" ]
