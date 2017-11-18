@@ -1,4 +1,4 @@
-# vim: ft=Dockerfile
+# vim: ft=dockerfile
 #
 # @package mongo
 # @author  yannoff <https://github.com/yannoff>
@@ -14,7 +14,12 @@ RUN \
     apk --no-cache add curl; \
     curl https://raw.githubusercontent.com/docker-library/mongo/master/3.0/docker-entrypoint.sh -o usr/local/bin/docker-entrypoint.sh; \
     chmod +x usr/local/bin/docker-entrypoint.sh; \
-    ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+    ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
+    apk del curl; \
+    rm -rfv /var/cache/apk/*; \
+    rm -rfv /usr/share/apk/keys/
+
+
 
 # Install needed packages
 RUN \
@@ -22,12 +27,10 @@ RUN \
         bash \
         mongodb \
         su-exec; \
-    ln -s $(which su-exec) /bin/gosu
+    ln -s $(which su-exec) /bin/gosu; \
+    rm -rfv /var/cache/apk/*; \
+    rm -rfv /usr/share/apk/keys/
 
-# Remove unused packages & APK indexes
-RUN \
-    apk --no-cache del curl; \
-    rm -rfv /var/cache/apk/*
 
 # Create & expose MongoDB storage dirs
 RUN mkdir -p /data/db /data/configdb \
