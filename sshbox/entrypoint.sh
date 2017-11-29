@@ -45,7 +45,13 @@ then
     echo ". /etc/profile.d/color_prompt" >> /home/$USER/.bashrc
     echo "PS1='\w\$ '" >> /home/$USER/.bashrc
     
-    [ -f $IDENTITY_FILE ] || err_message "Could not find identity file. Exiting.\n\nPlease provide one by mounting it to [%s] when running the container.\n\n" $IDENTITY_FILE
+    if [ ! -z "$CREATE_SSH_KEY" ]
+    then
+        ssh-keygen -t rsa -N "" -f $IDENTITY_FILE
+        printf "\n\nCreated a new SSH Key. Here is the public generated key:\n\n%s\n\n" "`cat ${IDENTITY_FILE}.pub`"
+    else
+        [ -f $IDENTITY_FILE ] || err_message "Could not find identity file. Exiting.\n\nPlease provide one by mounting it to [%s] when running the container.\n\n" $IDENTITY_FILE
+    fi
 
     mkdir -p /home/$USER/.ssh || true
     cp -v ${SSH_HOME}/* $USERLAND/.ssh 2>&1 >>$LOG_FILE
@@ -62,3 +68,5 @@ else
 fi
 
 su-exec $USER "$@" 2>&1
+
+[ -z "$KEEP_ALIVE" ] || /keep-alive
