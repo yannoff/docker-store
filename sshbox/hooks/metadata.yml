@@ -1,0 +1,3 @@
+author: yannoff
+description: A sandbox to issue SSH commands in a self-contained & secluded environment, based on Alpine
+license: MIT
