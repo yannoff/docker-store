@@ -1,3 +1,4 @@
-author: yannoff
-description: A sandbox to issue SSH commands in a self-contained & secluded environment, based on Alpine
+author: yannoff <https://github.com/yannoff>
+maintainer: yannoff <https://github.com/yannoff>
+description: A sandbox to issue SSH commands in a self-contained and secluded environment, based on Alpine
 license: MIT
