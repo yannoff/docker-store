@@ -1,6 +1,6 @@
 # vim: ft=Dockerfile
 #
-# @package alpine
+# @package sshbox
 # @author  yannoff <https://github.com/yannoff>
 # @license MIT
 #
