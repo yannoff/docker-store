@@ -16,7 +16,7 @@ err_undefined() {
     exit 1
 }
 
-err_message() {
+dbg_message() {
     printf "$@"
     exit 1
 }
@@ -50,7 +50,7 @@ then
         ssh-keygen -t rsa -N "" -f $IDENTITY_FILE
         printf "\n\nCreated a new SSH Key. Here is the public generated key:\n\n%s\n\n" "`cat ${IDENTITY_FILE}.pub`"
     else
-        [ -f $IDENTITY_FILE ] || err_message "Could not find identity file. Exiting.\n\nPlease provide one by mounting it to [%s] when running the container.\n\n" $IDENTITY_FILE
+        [ -f $IDENTITY_FILE ] || dbg_message "Could not find identity file. Exiting.\n\nPlease provide one by mounting it to [%s] when running the container.\n\n" $IDENTITY_FILE
     fi
 
     mkdir -p /home/$USER/.ssh || true
@@ -69,4 +69,4 @@ fi
 
 su-exec $USER "$@" 2>&1
 
-[ -z "$KEEP_ALIVE" ] || /keep-alive
+[ -z "$DAEMONIZE" ] || /keep-alive

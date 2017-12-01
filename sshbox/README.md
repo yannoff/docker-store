@@ -15,7 +15,7 @@ Optionally, a few other variables may be used to override defaults:
 - `UID` Id of the user running the sandbox (\*)
 
 - `CREATE_SSH_KEY` Flag to request for a new RSA SSH key creation inside the container. (\*) Public SSH Key will be output into container's log.
-- `KEEP_ALIVE` Flag to keep the container running, allowing for later `docker exec` command
+- `DAEMONIZE` Flag to keep the container running, allowing for later `docker exec` command
 
 `(*)`: Only at first run.
 
