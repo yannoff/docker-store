@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# DockerHub pre-build hook script
+# Add the labels stored in metadata.yml
+#
+# @package gitbox
+# @author  yannoff <https://github.com/yannoff>
+# @license MIT
+#
+
+labels=`awk -F ": " '{ printf "%s=\042%s\042 ",$1,$2; }' $(dirname $0)/metadata.yml`"\n"
+
+echo "LABEL: $labels"
+
+sed  -i "s/MAINTAINER.*$/&\nLABEL $labels/" Dockerfile
