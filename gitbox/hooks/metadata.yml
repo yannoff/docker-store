@@ -1,0 +1,4 @@
+author: yannoff
+maintainer: yannoff
+description: An image derived from [sshbox](https:\/\/hub.docker.com\/r\/yannoff\/sshbox\/) and modified for the needs of [su-git] project.
+license: MIT
