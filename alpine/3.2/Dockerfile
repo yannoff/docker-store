@@ -6,7 +6,7 @@
 # @license MIT
 #
 
-FROM alpine:latest
+FROM alpine:3.2
 
 MAINTAINER Yannoff <https://github.com/yannoff>
 

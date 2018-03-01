@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# @package alpine
+# @author  yannoff <https://github.com/yannoff>
+# @license MIT
+#
+
+# Loop infinitely, sleeping 1h between each call
+while [ 1 -eq 1 ]
+do
+    echo "Still alive..."
+    sleep 3600
+done
