@@ -5,6 +5,7 @@ Source repository for [yannoff](https://hub.docker.com/u/yannoff/ "Yannoff's Doc
 ## Available images
 
 - [alpine](alpine): An [Alpine Linux](https://alpinelinux.org/) image with bash installed and a script to keep the container running. Usefull for testing package install/builds on Alpine.
+- [php](https://github.com/yannoff/docker-store/tree/master/php): An leaf-weight PHP image based on [alpine](https://alpinelinux.org/).
 - [sshbox](sshbox): A sandbox to run SSH commands in a secured and secluded environment.
 - [gitbox](gitbox): A sandbox to run git commands in a secured and secluded environment.
 - [mariadb](mariadb): An alpine version of MariaDB server image.

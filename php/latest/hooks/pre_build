@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# DockerHub pre-build hook script
+# Add the labels stored in metadata.yml
+#
+# @package php
+# @author  yannoff <https://github.com/yannoff>
+# @license MIT
+#
+
+labels=`awk -F ": " '(NR != "") { printf " \\\\\n      %s=\042%s\042",$1,$2; }' $(dirname $0)/../../metadata.yml`
+
+echo "LABEL: $labels"
+
+DockerFileBegin=`awk '(NR==1),/MAINTAINER/ { print; }' Dockerfile`
+DockerFileEnd=`awk 'BEGIN { i = 0; } /MAINTAINER/,(NR=="") { if (i > 0) { print $0 }; i++; }' Dockerfile`
+echo -e "$DockerFileBegin" > Dockerfile
+echo -e "\nLABEL$labels\n" >>Dockerfile
+echo -e "$DockerFileEnd" >> Dockerfile
