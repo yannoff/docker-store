@@ -12,18 +12,22 @@ MAINTAINER Yannoff <https://github.com/yannoff>
 ARG ES_VERSION=6.8.6
 ARG ES_HOME=/usr/share/elasticsearch
 ARG ELASTICSEARCH_REPO="https://artifacts.elastic.co/downloads/elasticsearch"
-# TODO: If set, launch bin/elasticsearch-plugins install ${ES_PLUGINS}
+# If set, launch bin/elasticsearch-plugins install ${ES_PLUGINS}
 ARG ES_PLUGINS="analysis-icu"
 # Optional UID/GID overrides
 ARG UID=9200
 ARG GID=9200
+# Dirs to be created under ${ES_HOME} and owned by elasticsearch user
+ARG ES_SUBDIRS="data logs config config/scripts"
 
 ENV ES_HOME ${ES_HOME}
+ENV ES_USER elasticsearch
+ENV ES_GROUP elasticsearch
 
 
 # ensure elasticsearch user exists
-RUN addgroup -g ${GID} -S elasticsearch && \
-    adduser -u ${UID} -S -G elasticsearch elasticsearch
+RUN addgroup -g ${GID} -S ${ES_USER} && \
+    adduser -u ${UID} -S -G ${ES_GROUP} ${ES_USER}
 
 # grab su-exec for easy step-down from root
 # and bash for "bin/elasticsearch" among others
@@ -36,8 +40,6 @@ WORKDIR ${ES_HOME}
 ENV PATH ${ES_HOME}/bin:$PATH
 
 ENV ELASTICSEARCH_VERSION ${ES_VERSION}
-# TODO Do we REALLY need those as ENV variables? Some space could be saved here
-#ENV \
 
 RUN set -ex; \
 	\
@@ -71,26 +73,25 @@ RUN set -ex; \
 	tar -xf ${ELASTICSEARCH_TARBALL_NAME} --strip-components=1; \
 	rm ${ELASTICSEARCH_TARBALL_NAME}; \
     \
+    # Clean useless binaries, saving a little more space
+    rm -rf bin/*.bat bin/*.exe; \
+    \
     # Machine-learning module not supported by Alpine
     rm -rf modules/x-pack-ml; \
 	\
-	apk del .fetch-deps; \
+	apk --no-cache del .fetch-deps; \
 	\
     # TODO: Include in below <for> loop
 	mkdir -p ./plugins; \
-	for path in \
-		./data \
-		./logs \
-		./config \
-		./config/scripts \
-	; do \
+	for path in ${ES_SUBDIRS}; \
+	do \
 		mkdir -p "$path"; \
-		chown -R elasticsearch:elasticsearch "$path"; \
+		chown -R ${ES_USER}:${ES_GROUP} "$path"; \
 	done; \
 	\
     # fix https://github.com/pires/docker-elasticsearch/issues/56
     export ES_TMPDIR=`mktemp -d -t elasticsearch.XXXXXXXX`; \
-    chown -R elasticsearch:elasticsearch ${ES_TMPDIR}; \
+    chown -R ${ES_USER}:${ES_GROUP} ${ES_TMPDIR}; \
     # endfix
     \
     # Additional plugins to be included in the image
@@ -101,25 +102,30 @@ RUN set -ex; \
         done; \
     fi; \
 
-# we shouldn't need much RAM to test --version (default is 2gb, which gets Jenkins in trouble sometimes)
+    # we shouldn't need much RAM to test --version (default is 2gb, which gets Jenkins in trouble sometimes)
 	export ES_JAVA_OPTS='-Xms32m -Xmx32m'; \
 	if [ "${ELASTICSEARCH_VERSION%%.*}" -gt 1 ]; then \
-		elasticsearch --version; \
+		VERSION_OPT=--version; \
 	else \
-# elasticsearch 1.x doesn't support --version
-# but in 5.x, "-v" is verbose (and "-V" is --version)
-		elasticsearch -v; \
+    # elasticsearch 1.x doesn't support --version
+    # but in 5.x, "-v" is verbose (and "-V" is --version)
+		VERSION_OPT=-v; \
 	fi; \
+    \
+    su-exec ${ES_USER} elasticsearch $VERSION_OPT; \
     \
     rm -rf ${ES_TMPDIR}
 
 
-VOLUME /usr/share/elasticsearch/data
+VOLUME ${ES_HOME}/data
 
+# TODO: Find a workaround
+# See https://github.com/moby/moby/issues/35018
+#COPY --chown=${ES_USER}:${ES_GROUP} config ./config
 COPY --chown=elasticsearch:elasticsearch config ./config
 COPY docker-entrypoint.sh /
 
 EXPOSE 9200 9300
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
-USER elasticsearch
+USER ${ES_USER}
