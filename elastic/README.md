@@ -19,5 +19,4 @@ See [docker official documentation](https://docs.docker.com/engine/reference/bui
 - `ELASTICSEARCH_REPO` Alternative repository for ElasticSearch downloads (defaults to `https://artifacts.elastic.co/downloads/elasticsearch`)
 - `UID` : ID for elasticsearch user (defaults to `9200`) 
 - `GID` : ID for elasticsearch group (defaults to `9200`) 
-
-- `ES_PLUGINS` : Additional plugins to be installeld at build time (defaults to `analysis-icu`) :warning: Not fully supported: multiple plugins install is not implemented yet
+- `ES_PLUGINS` : Space-separated list of additional plugins to be installeld at build time (defaults to `analysis-icu`)

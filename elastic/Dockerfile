@@ -96,7 +96,9 @@ RUN set -ex; \
     # Additional plugins to be included in the image
     # TODO: Implement loop to handle multiple plugins
     if [ "$ES_PLUGINS" ]; then \
-        elasticsearch-plugin install ${ES_PLUGINS}; \
+        for plugin in ${ES_PLUGINS}; do \
+            elasticsearch-plugin install ${plugin}; \
+        done; \
     fi; \
 
 # we shouldn't need much RAM to test --version (default is 2gb, which gets Jenkins in trouble sometimes)
