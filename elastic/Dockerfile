@@ -9,7 +9,7 @@ FROM openjdk:8-jre-alpine
 
 MAINTAINER Yannoff <https://github.com/yannoff>
 
-ARG ES_VERSION=6.5.3
+ARG ES_VERSION=6.8.6
 ARG ES_HOME=/usr/share/elasticsearch
 ARG ELASTICSEARCH_REPO="https://artifacts.elastic.co/downloads/elasticsearch"
 # TODO: If set, launch bin/elasticsearch-plugins install ${ES_PLUGINS}
