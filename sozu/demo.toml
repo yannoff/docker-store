@@ -1,0 +1,45 @@
+# sozu proxy simple demo config file
+# @see https://github.com/sozu-proxy/sozu/blob/master/doc/how_to_use.md
+
+command_socket = "/var/run/sozucmd.sock"
+saved_state    = "./state.json"
+log_level      = "info"
+log_target     = "stdout"
+command_buffer_size = 16384
+worker_count = 2
+handle_process_affinity = false
+
+# you need this, but currently it`s not used
+[metrics]
+address = "0.0.0.0:8125"
+
+[http]
+address = "0.0.0.0"
+max_connections = 10
+port = 9090
+buffer_size = 16384
+answer_404 = "./404.html"
+answer_503 = "./503.html"
+
+
+[applications]
+
+[applications.webapp]
+# possible values are http or tcp
+# https proxies will use http here
+protocol = "http"
+
+# per application load balancing algorithm. The possible values are
+# "roundrobin" and "random". Defaults to "roundrobin"
+# load_balancing_policy="roundrobin"
+
+
+frontends = [
+#  { address = "0.0.0.0:8443", hostname = "lolcatho.st", certificate = "../lib/assets/certificate.pem", key = "../lib/assets/key.pem", certificate_chain = "../lib/assets/certificate_chain.pem" },
+  { address = "0.0.0.0:8080", hostname = "lolcatho.st" }
+]
+# additional options for frontends: sticky_session (boolean) and https_redirect (boolean)
+
+backends  = [
+  { address = "0.0.0.0:1026" }
+]
