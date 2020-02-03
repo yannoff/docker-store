@@ -48,4 +48,10 @@ mkdir -p /home/$USER/.ssh || true
 cp -v ${SSH_HOME}/* $USERLAND/.ssh 2>&1 >>$LOG_FILE
 chown -Rv $USER:$GROUP $USERLAND/.ssh 2>&1 >>$LOG_FILE || true
 
+# Update CA certificates if a custom one was provided
+if [ -n "$CERT_FILE" ]
+then
+    update-ca-certificates --fresh 2>&1 >>$LOG_FILE
+fi
+
 su-exec $USER "$@" 2>&1
