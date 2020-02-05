@@ -9,7 +9,7 @@ FROM openjdk:8-jre-alpine
 
 MAINTAINER Yannoff <https://github.com/yannoff>
 
-ARG ES_VERSION=6.8.6
+ARG ES_VERSION=7.5.2-linux-x86_64
 ARG ES_HOME=/usr/share/elasticsearch
 ARG ELASTICSEARCH_REPO="https://artifacts.elastic.co/downloads/elasticsearch"
 # TODO: If set, launch bin/elasticsearch-plugins install ${ES_PLUGINS}
@@ -74,7 +74,7 @@ RUN set -ex; \
     # Machine-learning module not supported by Alpine
     rm -rf modules/x-pack-ml; \
 	\
-	apk del .fetch-deps; \
+	apk del --no-cache .fetch-deps; \
 	\
     # TODO: Include in below <for> loop
 	mkdir -p ./plugins; \
@@ -111,7 +111,8 @@ RUN set -ex; \
 		elasticsearch -v; \
 	fi; \
     \
-    rm -rf ${ES_TMPDIR}
+    find ${ES_TMPDIR};
+    #rm -rf ${ES_TMPDIR} || true;
 
 
 VOLUME /usr/share/elasticsearch/data
