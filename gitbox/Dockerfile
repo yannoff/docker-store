@@ -18,6 +18,7 @@ RUN \
     su-exec \
     curl \
     git \
+    vim \
     ; \
     mkdir -p /app/src; \
     mkdir -p /app/ssh; \
