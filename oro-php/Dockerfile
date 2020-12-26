@@ -92,7 +92,7 @@ RUN \
 COPY docker-php-entrypoint /usr/local/bin
 
 COPY supervisord.conf oro*.conf /etc/supervisord/
-COPY www.conf /usr/local/etc/php-fpm.d/
+COPY www.conf /usr/local/etc/php-fpm.d/www.ini
 
 
 # Needed by locales
