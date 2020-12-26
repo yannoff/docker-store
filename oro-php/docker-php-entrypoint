@@ -17,11 +17,11 @@ fi
 # If command is "php-fpm", run it as root
 if [ "$1" = "php-fpm" ]
 then
+    pool_config_tpl=/usr/local/etc/php-fpm.d/www.ini
     pool_config_file=/usr/local/etc/php-fpm.d/www.conf
     if [ -w "${pool_config_file}"  -a -O "${pool_config_file}" ]
     then
-        sed -i -E "s/(user\|owner)\s*=.*/\1 = ${USER:-0}/" $pool_config_file
-        sed -i -E "s/(group)\s*=.*/\1 = ${GROUP:-0}/" $pool_config_file
+        envsubst >$pool_config_file <$pool_config_tpl '$USER' '$GROUP'
     fi
 
     exec "$@"
