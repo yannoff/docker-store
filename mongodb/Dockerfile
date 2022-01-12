@@ -12,7 +12,7 @@ MAINTAINER yannoff <https://github.com/yannoff>
 # Retrieve MongoDB's official entrypoint from github
 RUN \
     apk --no-cache add curl; \
-    curl https://raw.githubusercontent.com/docker-library/mongo/master/4.1/docker-entrypoint.sh -o usr/local/bin/docker-entrypoint.sh; \
+    curl https://raw.githubusercontent.com/docker-library/mongo/6e4f9aebd519141a0f8dffbdb2a9502e668c3bd7/4.0/docker-entrypoint.sh -o usr/local/bin/docker-entrypoint.sh; \
     chmod +x usr/local/bin/docker-entrypoint.sh; \
     ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 
