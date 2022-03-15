@@ -4,9 +4,9 @@ A ready-to-use, fully working Alpine version of [PHPMyAdmin](https://github.com/
 
 ## Supported tags
 
-- [5.1-fpm](tree/phpma/Dockerfile)
-, [5.1](tree/phpma/Dockerfile)
-, [latest](tree/phpma/Dockerfile)
+- [5.1-fpm](Dockerfile)
+, [5.1](Dockerfile)
+, [latest](Dockerfile)
 
 ## Examples
 
