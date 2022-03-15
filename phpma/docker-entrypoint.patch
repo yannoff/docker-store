@@ -1,0 +1,21 @@
+diff --git a/docker-entrypoint.sh b/docker-entrypoint.sh
+--- a/docker-entrypoint.sh
++++ b/docker-entrypoint.sh
+@@ -1,5 +1,7 @@
+ #!/bin/bash
+-if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
++
++# Every command passed to the entrypoint MUST trigger this code block
++#if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
+ 
+     if [ ! -f /etc/phpmyadmin/config.secret.inc.php ]; then
+         cat > /etc/phpmyadmin/config.secret.inc.php <<EOT
+@@ -11,7 +13,7 @@ EOT
+     if [ ! -f /etc/phpmyadmin/config.user.inc.php ]; then
+         touch /etc/phpmyadmin/config.user.inc.php
+     fi
+-fi
++#fi
+ 
+ if [ ! -z "${HIDE_PHP_VERSION}" ]; then
+     echo "PHP version is now hidden."
