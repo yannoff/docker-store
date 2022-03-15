@@ -1,3 +1,10 @@
+# vim: ft=Dockerfile
+#
+# @package phpma
+# @author  yannoff <https://github.com/yannoff>
+# @license MIT
+#
+
 ARG VERSION=5.1
 
 FROM phpmyadmin:${VERSION}-fpm-alpine
