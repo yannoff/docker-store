@@ -7,3 +7,4 @@ Source repository for [yannoff](https://hub.docker.com/u/yannoff/ "Yannoff's Doc
 - [mariadb](https://github.com/yannoff/docker-store/tree/mariadb/master/mariadb): An alpine version of MariaDB server image.
 - [mongodb](https://github.com/yannoff/docker-store/tree/mongodb/master/mongodb): An alpine version of MongoDB server image.
 - [elastic](https://github.com/yannoff/docker-store/tree/elastic/master/elastic): An alpine version of Elastic Search version 6.5.3.
+- [phpma](https://github.com/yannoff/docker-store/tree/phpma/master/phpma): A ready-to-use, fully working Alpine version of [PHPMyAdmin](https://github.com/phpmyadmin/docker/tree/master/fpm-alpine).
