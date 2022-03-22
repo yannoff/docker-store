@@ -4,7 +4,8 @@ A ready-to-use, fully working Alpine version of [PHPMyAdmin](https://github.com/
 
 ## Supported tags
 
-- [5.1-fpm](Dockerfile)
+- [5.1.3-fpm](Dockerfile)
+, [5.1-fpm](Dockerfile)
 , [5.1](Dockerfile)
 , [latest](Dockerfile)
 

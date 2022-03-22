@@ -5,7 +5,7 @@
 # @license MIT
 #
 
-ARG VERSION=5.1
+ARG VERSION=5.1.3
 
 FROM phpmyadmin:${VERSION}-fpm-alpine
 
