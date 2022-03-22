@@ -1,0 +1,2 @@
+#!/bin/bash
+git batch-rebase $(git branch | grep master | awk '($1 != "*") { print $NF; }' | xargs)
