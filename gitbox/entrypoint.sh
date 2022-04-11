@@ -7,8 +7,8 @@
 
 DEFAULT_ID=1000
 LOG_FILE=/var/log/bootstrap.log
-SSH_HOME=/app/ssh
-IDENTITY_FILE=${SSH_HOME}/id_rsa
+[ -z "${SSH_HOME}" ] && SSH_HOME=/app/ssh
+[ -z "${IDENTITY_FILE}" ] && IDENTITY_FILE=${SSH_HOME}/id_rsa
 KNOWN_HOSTS_FILE=${SSH_HOME}/known_hosts
 
 err_undefined() {
