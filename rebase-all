@@ -1,2 +1,16 @@
 #!/bin/bash
-git batch-rebase $(git branch | grep master | awk '($1 != "*") { print $NF; }' | xargs)
+
+branches=$(git branch | grep master | awk '($1 != "*") { print $NF; }' | xargs)
+
+for arg
+do
+    case ${arg} in
+        -r|--remotes)
+            branches=$(git branch -a | awk '($1 != "*") && ($NF ~ "^remotes.*master") { gsub("remotes/origin/", "", $NF); print $NF; }' | xargs)
+            shift 1
+            ;;
+    esac
+done
+
+echo "Rebasing: ${branches}"
+git batch-rebase ${branches} "$@"
